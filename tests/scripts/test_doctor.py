@@ -8,7 +8,7 @@ import unittest
 from os import path
 
 from beancount.parser import cmptest
-from beancount.scripts import directories_test
+from tests.scripts import test_directories
 from beancount.scripts.doctor import doctor
 from beancount.utils import test_utils
 
@@ -75,7 +75,7 @@ class TestScriptDoctor(test_utils.ClickTestCase):
 
 
 class TestScriptCheckDirectories(
-    directories_test.TestScriptCheckDirectories, test_utils.ClickTestCase
+    test_directories.TestScriptCheckDirectories, test_utils.ClickTestCase
 ):
     @test_utils.docfile
     def test_invocation(self, filename):

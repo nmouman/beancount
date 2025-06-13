@@ -12,7 +12,7 @@ import copy
 import datetime
 import re
 from decimal import Decimal
-from typing import NamedTuple
+from typing import NamedTuple, Type
 from typing import Optional
 
 from beancount.core.amount import CURRENCY_RE
@@ -20,7 +20,7 @@ from beancount.core.amount import Amount
 from beancount.core.amount import abs as amount_abs
 from beancount.core.amount import mul as amount_mul
 from beancount.core.display_context import DEFAULT_FORMATTER
-from beancount.core.number import NUMBER_RE
+from beancount.core.number import NUMBER_RE, MISSING
 from beancount.core.number import ZERO
 from beancount.core.number import D
 
@@ -49,7 +49,7 @@ class CostSpec(NamedTuple):
     """
 
     # A Decimal instance, the cost/price per unit, or None if unspecified.
-    number_per: Optional[Decimal]
+    number_per: Optional[Decimal] | Type[MISSING]
     # A Decimal instance, the total cost/price, or None if unspecified.
     number_total: Optional[Decimal]
     # A string, the commodity of the amount, or None if unspecified.

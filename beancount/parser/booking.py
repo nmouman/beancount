@@ -14,6 +14,7 @@ from beancount.core import inventory
 from beancount.core import position
 from beancount.core.number import MISSING
 from beancount.core.number import ZERO
+from beancount.core.position import CostSpec
 from beancount.parser import booking_full
 
 
@@ -192,7 +193,7 @@ def convert_lot_specs_to_lots(entries):
     return new_entries, errors
 
 
-def convert_spec_to_cost(units, cost_spec):
+def convert_spec_to_cost(units, cost_spec: CostSpec | None):
     """Convert a posting's CostSpec instance to a Cost.
 
     Args:
@@ -205,13 +206,13 @@ def convert_spec_to_cost(units, cost_spec):
     if isinstance(units, amount.Amount):
         if cost_spec is not None:
             number_per, number_total, cost_currency, date, label, merge = cost_spec
+            units_num = units.number
 
             # Compute the cost.
-            if number_per is not MISSING or number_total is not None:
+            if (number_per is not MISSING or number_total is not None) and not units.number.is_zero():
                 if number_total is not None:
                     # Compute the per-unit cost if there is some total cost
                     # component involved.
-                    units_num = units.number
                     cost_total = number_total
                     if number_per is not MISSING:
                         cost_total += number_per * units_num

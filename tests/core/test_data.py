@@ -91,15 +91,15 @@ class TestData(unittest.TestCase):
         date3 = date(2014, 1, 20)
         entries = [
             data.Transaction(
-                data.new_metadata(".", 1100), date3, FLAG, None, "Next day", None, None, []
+                data.new_metadata("../../beancount/core", 1100), date3, FLAG, None, "Next day", None, None, []
             ),
-            data.Close(data.new_metadata(".", 1000), date2, account),
+            data.Close(data.new_metadata("../../beancount/core", 1000), date2, account),
             data.Balance(
-                data.new_metadata(".", 1001), date2, account, A('200.00 USD"'), None, None
+                data.new_metadata("../../beancount/core", 1001), date2, account, A('200.00 USD"'), None, None
             ),
-            data.Open(data.new_metadata(".", 1002), date2, account, "USD", None),
+            data.Open(data.new_metadata("../../beancount/core", 1002), date2, account, "USD", None),
             data.Transaction(
-                data.new_metadata(".", 1009),
+                data.new_metadata("../../beancount/core", 1009),
                 date2,
                 FLAG,
                 None,
@@ -109,7 +109,7 @@ class TestData(unittest.TestCase):
                 [],
             ),
             data.Transaction(
-                data.new_metadata(".", 1008),
+                data.new_metadata("../../beancount/core", 1008),
                 date2,
                 FLAG,
                 None,
@@ -119,7 +119,7 @@ class TestData(unittest.TestCase):
                 [],
             ),
             data.Transaction(
-                data.new_metadata(".", 900),
+                data.new_metadata("../../beancount/core", 900),
                 date1,
                 FLAG,
                 None,
@@ -203,7 +203,7 @@ class TestData(unittest.TestCase):
 
     def test_has_entry_account_component(self):
         entry = data.Transaction(
-            data.new_metadata(".", 0),
+            data.new_metadata("../../beancount/core", 0),
             datetime.date.today(),
             FLAG,
             None,
@@ -284,7 +284,7 @@ class TestData(unittest.TestCase):
         self.assertTrue(data.find_closest(entries, "/tmp/apples.beancount", 99) is None)
 
     def test_remove_account_postings(self):
-        meta = data.new_metadata(".", 0)
+        meta = data.new_metadata("../../beancount/core", 0)
         date = datetime.date.today()
         entry1 = data.Open(meta, date, "Liabilities:US:CreditCard", None, None)
         entry2 = data.Open(meta, date, "Equity:Rounding", None, None)
