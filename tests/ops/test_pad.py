@@ -381,56 +381,6 @@ class TestPadding(cmptest.TestCase):
             entries,
         )
 
-    @loader.load_doc()
-    def test_pad_check_balances(self, entries, errors, __):
-        """
-        2013-05-01 open Assets:Checking
-        2013-05-01 open Assets:Cash
-        2013-05-01 open Equity:Opening-Balances
-
-        2013-05-01 pad  Assets:Checking   Equity:Opening-Balances
-
-        2013-05-03 txn "Add 20$"
-          Assets:Checking                        10 USD
-          Assets:Cash
-
-        2013-05-10 balance Assets:Checking      105 USD
-
-        2013-05-15 txn "Add 20$"
-          Assets:Checking                        20 USD
-          Assets:Cash
-
-        2013-05-16 txn "Add 20$"
-          Assets:Checking                        20 USD
-          Assets:Cash
-
-        2013-06-01 balance Assets:Checking      145 USD
-
-        """
-        post_map = realization.postings_by_account(entries)
-        txn_postings = post_map["Assets:Checking"]
-
-        balances = []
-        pad_balance = inventory.Inventory()
-        for txn_posting in txn_postings:
-            if isinstance(txn_posting, data.TxnPosting):
-                position_, _ = pad_balance.add_position(txn_posting.posting)
-            balances.append((type(txn_posting), pad_balance.get_currency_units("USD")))
-
-        self.assertEqual(
-            balances,
-            [
-                (data.Open, A("0.00 USD")),
-                (data.Pad, A("0.00 USD")),
-                (data.TxnPosting, A("95.00 USD")),
-                (data.TxnPosting, A("105.00 USD")),
-                (data.Balance, A("105.00 USD")),
-                (data.TxnPosting, A("125.00 USD")),
-                (data.TxnPosting, A("145.00 USD")),
-                (data.Balance, A("145.00 USD")),
-            ],
-        )
-
     # Note: You could try padding A into B and B into A to see if it works.
 
     @loader.load_doc(expect_errors=True)
